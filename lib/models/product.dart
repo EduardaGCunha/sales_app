@@ -1,16 +1,18 @@
-// import 'dart:convert';
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
 import '../utils/bool.dart';
-// import 'package:http/http.dart' as http;
+import '../utils/constants.dart';
+import 'package:http/http.dart' as http;
 
 class Product with ChangeNotifier{
   final String id;
   final String name;
   final String description;
   final String aplications;
+  final List<String> category;
   final String characteristics;
   DateTime lastUpdated;
   bool hasInternet = false;
@@ -22,6 +24,7 @@ class Product with ChangeNotifier{
     required this.name,
     required this.aplications,
     required this.description,
+    required this.category,
     required this.characteristics,
     required this.lastUpdated,
     this.isDeleted = false,
@@ -34,6 +37,7 @@ class Product with ChangeNotifier{
       'name': name,
       'aplications': aplications,
       'characteristics': characteristics,
+      'category': category.join(','),
       'lastUpdated': lastUpdated.toIso8601String(),
       'isDeleted': boolToSql(isDeleted),
       'description': description,
@@ -47,6 +51,7 @@ class Product with ChangeNotifier{
       name: map['name'] as String,
       aplications: map['aplications'] as String,
       characteristics: map['characteristics'] as String,
+      category: map['category'].split(',') as List<String>,
       description: map['description'] != null? map['description'] as String: '',
       lastUpdated: DateTime.parse(map['lastUpdated']),
       isDeleted: map['isDeleted'] != null? checkBool(map['isDeleted']) : false,
@@ -59,27 +64,23 @@ class Product with ChangeNotifier{
     notifyListeners();
   }
 
-  // Future<void> toggleDeletion() async {
-  //   try {
-  //     toggleDeleted();
+  Future<void> toggleDeletion() async {
+    try {
+      toggleDeleted();
 
-  //     final response = await http.patch(
-  //       Uri.parse('${Constants.ITEM_BASE_URL}/$id.json'),
-  //       body: jsonEncode({"isDeleted": isDeleted}),
-  //     );
+      final response = await http.patch(
+        Uri.parse('${Constants.PRODUCT_BASE_URL}/$id.json'),
+        body: jsonEncode({"isDeleted": isDeleted}),
+      );
 
-  //     if (response.statusCode >= 400) {
-  //       toggleDeleted();
-  //     }
-  //   } catch (_) {
-  //     toggleDeleted();
-  //   }
+      if (response.statusCode >= 400) {
+        toggleDeleted();
+      }
+    } catch (_) {
+      toggleDeleted();
+    }
 
-  //   notifyListeners();
-  // }
-
-  // onLoad() async {
-  //   hasInternet = await hasInternetConnection();
-  // }
+    notifyListeners();
+  }
 
 } 

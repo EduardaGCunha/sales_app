@@ -27,7 +27,6 @@ class ProductList with ChangeNotifier {
   List<Product> get items => [..._items];
 
   Future<void> loadProducts() async {
-    await onLoad();
     _items.clear();
     List<Product> products = [];
     List data = await DB.getInfoFromDb('products');
@@ -215,21 +214,21 @@ class ProductList with ChangeNotifier {
       name: data['name'] as String,
       lastUpdated: DateTime.now(),
       description: data['description'] as String,
+      category: data['category'] as List<String>,
       aplications: data['aplications'] as String,
       characteristics: data['characteristics'] as String,
     );
 
-    // if (hasId) {
-    //   if(hasInternet == true && needUpdate.isNotEmpty){
-    //     for(var element in needUpdate){
-    //       await updateProduct(element);
-    //     }
-    //   }
-    //   return updateProduct(product);
-    // } else {
-    //   return await addProduct(product);
-    // }
-    return await addProduct(product);
+    if (hasId) {
+      if(hasInternet == true && needUpdate.isNotEmpty){
+        for(var element in needUpdate){
+          await updateProduct(element);
+        }
+      }
+      return updateProduct(product);
+    } else {
+      return await addProduct(product);
+    }
   }
 
   Future<void> addProduct(Product product) async {
@@ -262,6 +261,7 @@ class ProductList with ChangeNotifier {
         id: id,
         lastUpdated: lastUpdated,
         name: product.name,
+        category: product.category,
         description: product.description,
         aplications: product.aplications,
         characteristics: product.characteristics,
@@ -281,42 +281,41 @@ class ProductList with ChangeNotifier {
 
 
  
-  // Future<void> updateProduct(Obra product) async {
-  //   int index = _items.indexWhere((p) => p.id == product.id);
+  Future<void> updateProduct(Product product) async {
+    int index = _items.indexWhere((p) => p.id == product.id);
     
-  //   if(hasInternet == true){
-  //     if (index >= 0) {
-  //       await http.patch(
-  //         Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),
-  //         body: jsonEncode(
-  //           {
-  //             "name": product.name,
-  //             "engineer": product.engineer,
-  //             "address": product.address,
-  //             "owner": product.owner,
-  //             "isUpdated": true,
-  //             "lastUpdated": DateTime.now().toIso8601String(),
-  //           },
-  //         ),
-  //       );
-  //       _items[index] = product;
-  //     }
-  //   }
-  //   product.lastUpdated = DateTime.now();
-  //   await DB.updateInfo('obras', product.id, product.toMapSQL());
-  //   await loadProducts();
-  //   notifyListeners();
-  // }
+    if(hasInternet == true){
+      if (index >= 0) {
+        await http.patch(
+          Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),
+          body: jsonEncode(
+            {
+              "name": product.name,
+              "description": product.description,
+              "aplications": product.aplications,
+              "characteristics": product.characteristics,
+              "lastUpdated": product.lastUpdated.toIso8601String(),
+            },
+          ),
+        );
+        _items[index] = product;
+      }
+    }
+    product.lastUpdated = DateTime.now();
+    await DB.updateInfo('products', product.id, product.toMapSQL());
+    await loadProducts();
+    notifyListeners();
+  }
 
-  // Future<void> removeProduct(Obra product) async {
-  //   if(hasInternet == true){
-  //     product.toggleDeletion();
-  //     await DB.deleteInfo("obras", product.id);
-  //   }else{
-  //     product.isDeleted = true;
-  //     await DB.updateInfo('obras', product.id, product.toMapSQL());
-  //   }
-  //   _items.remove(product);
-  //   notifyListeners();
-  // }
+  Future<void> removeProduct(Product product) async {
+    if(hasInternet == true){
+      product.toggleDeletion();
+      await DB.deleteInfo("products", product.id);
+    }else{
+      product.isDeleted = true;
+      await DB.updateInfo('products', product.id, product.toMapSQL());
+    }
+    _items.remove(product);
+    notifyListeners();
+  }
 }

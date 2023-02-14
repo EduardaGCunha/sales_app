@@ -5,38 +5,27 @@ import 'package:sqflite/sqflite.dart';
 
 
 class DB {
+  static const dbName = 'banco3';
+  static const dbVersion = 1;
+
   static Future<sql.Database> database() async {
-    int version = 1;
     final dbPath = await sql.getDatabasesPath();
-
-    if(await sql.databaseExists(dbPath)){
-      var database = await sql.openDatabase(dbPath);
-
-      if(await database.getVersion() < version){
-        await sql.deleteDatabase(dbPath);
-        
-        return sql.openDatabase(
-          path.join(dbPath, 'quality.db'),
-          onCreate:  (db, version) {
-            return db.execute(
-              'CREATE TABLE obras(id TEXT PRIMARY KEY, address TEXT, name TEXT, owner TEXT,engineer TEXT)'
-            );
-          },
-          version: version,
-        );
-      }
-
-      return database;
+    final dbExists = await sql.databaseExists(path.join(dbPath, dbName));
+    if (dbExists) {
+      return sql.openDatabase(path.join(dbPath, dbName));
     }
+    return _createDatabase(path.join(dbPath, dbName));
+  }
 
+  static Future<sql.Database> _createDatabase(String path) async {
     return sql.openDatabase(
-      path.join(dbPath, 'quality.db'),
-      onCreate:  (db, version) {
+      path,
+      version: dbVersion,
+      onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE obras(id TEXT PRIMARY KEY, address TEXT, name TEXT, owner TEXT,engineer TEXT)'
+            'CREATE TABLE products(id TEXT PRIMARY KEY, description TEXT, name TEXT, aplications TEXT, characteristics TEXT, lastUpdated TEXT, needFirebase INT, image TEXT, isDeleted INT, category TEXT)'
         );
       },
-      version: version,
     );
   }
 
