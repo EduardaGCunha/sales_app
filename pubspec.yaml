@@ -46,6 +46,9 @@ dependencies:
   internet_connection_checker: ^0.0.1+4
   firebase_core: ^2.1.1
   firebase_storage: ^11.0.3
+  flutter_multiselect: ^1.0.0
+  multiselect_formfield: ^0.1.7
+  image_picker: ^0.8.6+1
   
 
 dev_dependencies:

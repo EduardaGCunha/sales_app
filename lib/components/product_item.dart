@@ -18,9 +18,9 @@ class _ProductItemState extends State<ProductItem> {
     final product = Provider.of<Product>(context, listen: false);
 
     return Container(
-      padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
       decoration: BoxDecoration(
-        color: Colors.black,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -32,7 +32,7 @@ class _ProductItemState extends State<ProductItem> {
               IconButton(
                 onPressed:() => print('need to add changing favorites'),
                 icon: const Icon(Icons.favorite_border),
-                color: Colors.white,
+                color: Colors.black,
               )
             ],
           ),
@@ -43,26 +43,28 @@ class _ProductItemState extends State<ProductItem> {
               onTap: () {},
             ),
             decoration: const BoxDecoration(
-              color: Colors.pink,
+              color: Color.fromARGB(255, 243, 139, 174),
             ),
           ),
+          const SizedBox(height: 5,),
           Container(
             alignment: Alignment.centerLeft,
             child: Text(
               product.name,
               style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
+                color: Color.fromARGB(255, 9, 2, 49),
+                fontSize: 18,
                 fontWeight: FontWeight.w800,
               ),
             ),
           ),
+          const SizedBox(height: 5,),
           Container(
             alignment: Alignment.centerLeft,
             child: Text(
               product.description,
               style: const TextStyle(
-                color: Color.fromARGB(255, 150, 147, 147),
+                color: Color.fromARGB(255, 105, 102, 102),
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
               ),
@@ -71,7 +73,8 @@ class _ProductItemState extends State<ProductItem> {
           Expanded(
             flex: 1,
             child: Padding(
-              padding: const EdgeInsets.only(top: 5, bottom: 5, right: 0),
+              padding: const EdgeInsets.only(top: 5, bottom: 10
+            ,),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -79,13 +82,13 @@ class _ProductItemState extends State<ProductItem> {
                     onPressed: () => print('adicionar pro carrinho'),
                     icon: const Icon(
                       Icons.shopping_cart,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   )
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );

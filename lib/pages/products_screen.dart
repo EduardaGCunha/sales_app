@@ -32,8 +32,9 @@ class _ProductScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 236, 234, 234),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 236, 234, 234),
         elevation: 0,
         title: SizedBox(
           width: 600,

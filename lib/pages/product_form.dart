@@ -1,9 +1,13 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/models/product.dart';
 
+import '../components/image_input.dart';
 import '../models/product_list.dart';
 
 class ProductForm extends StatefulWidget {
@@ -18,8 +22,16 @@ class _ProductFormState extends State<ProductForm> {
 
   final _formKey = GlobalKey<FormState>();
   final _formData = <String, Object>{};
+  List<String> _selectedCategories = [];
 
   bool _isLoading = false;
+  File? _pickedImage;
+
+  void _selectImage(File pickedImage) {
+    setState(() {
+      _pickedImage = pickedImage;
+    });
+  }
 
   @override
   void didChangeDependencies() {
@@ -35,6 +47,7 @@ class _ProductFormState extends State<ProductForm> {
         _formData['description'] = product.description;
         _formData['characteristics'] = product.characteristics;
         _formData['aplications'] = product.aplications;
+        _formData['category'] = product.category;
       }
     }
   }
@@ -78,20 +91,21 @@ class _ProductFormState extends State<ProductForm> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 9, 123, 143),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         title: const Text('Adicione um Produto'),
-        actions: [
-          IconButton(
-            onPressed: _submitForm,
-            icon: const Icon(Icons.save),
-          ),
-        ],
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _submitForm,
+        icon: const Icon(Icons.save), 
+        label: const Text('Salvar')
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -102,6 +116,23 @@ class _ProductFormState extends State<ProductForm> {
                 key: _formKey,
                 child: ListView(
                   children: [
+                    const Text(
+                      'Adicione',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w400,
+                        color: Color.fromARGB(255, 46, 44, 44)
+                      ),
+                    ),
+                    const Text(
+                      'seu Produto!',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w400,
+                        color: Color.fromARGB(255, 46, 44, 44)
+                      ),
+                    ),
+                    const SizedBox(height: 20,),
                     TextFormField(
                       initialValue: _formData['name']?.toString(),
                       decoration: const InputDecoration(
@@ -122,6 +153,7 @@ class _ProductFormState extends State<ProductForm> {
                         return null;
                       },
                     ),
+                    const SizedBox(height: 20,),
                     TextFormField(
                       initialValue: _formData['description']?.toString(),
                       decoration: const InputDecoration(
@@ -143,26 +175,14 @@ class _ProductFormState extends State<ProductForm> {
                         return null;
                       },
                     ),
+                    const SizedBox(height: 20,),
                     TextFormField(
                       initialValue: _formData['characteristics']?.toString(),
                       decoration: const InputDecoration(
-                        labelText: 'Descrição',
+                        labelText: 'Características',
                       ),
                       textInputAction: TextInputAction.next,
                       onSaved: (characteristics) => _formData['characteristics'] = characteristics ?? '',
-                      validator: (_characteristics) {
-                        final characteristics = _characteristics ?? '';
-
-                        if (characteristics.trim().isEmpty) {
-                          return 'Descrição é obrigatória';
-                        }
-
-                        if (characteristics.trim().length < 3) {
-                          return 'O nome do engenheiro precisa de no mínimo de 3 letras.';
-                        }
-
-                        return null;
-                      },
                     ),
                     TextFormField(
                       initialValue: _formData['aplications']?.toString(),
@@ -173,13 +193,36 @@ class _ProductFormState extends State<ProductForm> {
                       onSaved: (aplications) =>
                           _formData['aplications'] = aplications ?? '',
                     ),
-                    const Padding(padding: EdgeInsets.all(10)),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 9, 123, 143),
-                          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20)),
-                      onPressed: _submitForm,
-                      child: const Text('Salvar'),
+                    const SizedBox(height: 20,),
+                    MultiSelectFormField(
+                      title: const Text(
+                        'Categorias',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 46, 44, 44)
+                        ),
+                      ),
+                      checkBoxActiveColor: Colors.green,
+                      dialogShapeBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                      dataSource: const [
+                        {'value': '1', 'display': 'Algebra'},
+                        {'value': '2', 'display': 'Calculus'},
+                        {'value': '3', 'display': 'Geometry'},
+                      ],
+                      textField: 'display',
+                      valueField: 'value',
+                      okButtonLabel: 'OK',
+                      cancelButtonLabel: 'CANCEL',
+                      hintWidget: const Text('Escolha as categorias'),
+                      initialValue: _selectedCategories,
+                      onSaved: (value) {
+                        if (value == null) return;
+                        _selectedCategories = List<String>.from(value.map((item) => item.toString()));
+                        _formData['category'] = _selectedCategories;
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25, right: 25, bottom: 10),
+                      child: ImageInput(_selectImage),
                     ),
                   ],
                 ),
