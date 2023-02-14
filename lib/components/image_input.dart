@@ -19,10 +19,14 @@ class _ImageInputState extends State<ImageInput> {
 
   _takePicture(bool value) async {
     final ImagePicker picker = ImagePicker();
-    XFile imageFile = await picker.pickImage(
+    XFile? imageFile = await picker.pickImage(
       source: value == true? ImageSource.camera : ImageSource.gallery,
       maxWidth: 600,
-    ) as XFile;
+    );
+
+    if(imageFile == null){
+      return;
+    }
 
     setState(() {
       _storedImage = File(imageFile.path);
@@ -47,16 +51,19 @@ class _ImageInputState extends State<ImageInput> {
             height: 100,
             decoration: BoxDecoration(
               border: Border.all(width: 1, color: Colors.grey),
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(20),
             ),
             alignment: Alignment.center,
-            child: _storedImage != null
-                ? Image.file(
-                    _storedImage!,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  )
-                : const Text('Nenhuma imagem!'),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: _storedImage != null
+                  ? Image.file(
+                      _storedImage!,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                  : const Text('Nenhuma imagem!'),
+            ),
           ),
         ),
         Row(
@@ -78,6 +85,7 @@ class _ImageInputState extends State<ImageInput> {
             ),
           ],
         ),
+        const SizedBox(height: 50,)
       ],
     );
   }

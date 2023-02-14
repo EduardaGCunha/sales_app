@@ -14,6 +14,7 @@ class Product with ChangeNotifier{
   final String aplications;
   final List<String> category;
   final String characteristics;
+  final String image;
   DateTime lastUpdated;
   bool hasInternet = false;
   bool isDeleted;
@@ -25,6 +26,7 @@ class Product with ChangeNotifier{
     required this.aplications,
     required this.description,
     required this.category,
+    required this.image,
     required this.characteristics,
     required this.lastUpdated,
     this.isDeleted = false,
@@ -36,6 +38,7 @@ class Product with ChangeNotifier{
       'id': id,
       'name': name,
       'aplications': aplications,
+      'image': image,
       'characteristics': characteristics,
       'category': category.join(','),
       'lastUpdated': lastUpdated.toIso8601String(),
@@ -49,6 +52,7 @@ class Product with ChangeNotifier{
     return Product(
       id: map['id'] as String,
       name: map['name'] as String,
+      image: map['image'] as String,
       aplications: map['aplications'] as String,
       characteristics: map['characteristics'] as String,
       category: map['category'].split(',') as List<String>,

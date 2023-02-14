@@ -1,7 +1,13 @@
 // ignore_for_file: use_key_in_widget_constructors
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/models/product.dart';
+
+import '../utils/app_routes.dart';
+import '../utils/cache.dart';
+import '../utils/connectivity.dart';
 
 
 //ImagePicker()
@@ -12,6 +18,12 @@ class ProductItem extends StatefulWidget {
 
 class _ProductItemState extends State<ProductItem> {
   double percentage = 0.0;
+  String hasInternet = '';
+
+  @override
+    void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context){
@@ -36,14 +48,25 @@ class _ProductItemState extends State<ProductItem> {
               )
             ],
           ),
-          Container(
+          SizedBox(
             height: 120,
-            padding: EdgeInsets.all(8),
+            width: double.infinity,
             child: InkWell(
-              onTap: () {},
-            ),
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 243, 139, 174),
+              onTap: () {
+                Navigator.of(context).pushNamed(AppRoutes.PRODUCT_DETAIL, arguments: {"product": product});
+              },
+              child: product.image == ''
+                  ? Container(color: const Color.fromARGB(255, 35, 150, 179),) 
+                  : Cache.hasInternet == 'yes'? 
+                  Image.network(
+                    product.image,
+                    fit: BoxFit.cover,
+                  )
+                  : Image.file(
+                    File(product.image),
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                  ),
             ),
           ),
           const SizedBox(height: 5,),

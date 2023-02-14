@@ -2,8 +2,10 @@
 
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:sales_app/models/product.dart';
 
 import '../utils/connectivity.dart';
@@ -204,7 +206,14 @@ class ProductList with ChangeNotifier {
   //   }
   // }
 
-  Future<void> saveProduct(Map<String, Object> data) async {
+  Future<String> uploadImageFirebase(Product product, File image) async{
+    final storage = FirebaseStorage.instance;
+    final imageRef = storage.ref().child('user_images').child(product.id);
+    await imageRef.putFile(image).whenComplete(() {});
+    return await imageRef.getDownloadURL();
+  }
+
+  Future<void> saveProduct(Map<String, Object> data, File? image) async {
     await onLoad();
 
     bool hasId = data['id'] != null;
@@ -212,6 +221,7 @@ class ProductList with ChangeNotifier {
     final product = Product(
       id: hasId ? data['id'] as String : Random().nextDouble().toString(),
       name: data['name'] as String,
+      image: '',
       lastUpdated: DateTime.now(),
       description: data['description'] as String,
       category: data['category'] as List<String>,
@@ -227,20 +237,25 @@ class ProductList with ChangeNotifier {
       }
       return updateProduct(product);
     } else {
-      return await addProduct(product);
+      return await addProduct(product, image);
     }
   }
 
-  Future<void> addProduct(Product product) async {
+  Future<void> addProduct(Product product, File? image) async {
     final lastUpdated = product.lastUpdated;
     String id;
     bool needFirebase;
+    String imageURL = '';
     if(hasInternet == true){
       needFirebase = false;
+      if(image != null){
+        imageURL = await uploadImageFirebase(product, image);
+      }
       final response = await http.post(
         Uri.parse('${Constants.PRODUCT_BASE_URL}.json'),
         body: jsonEncode(
           {
+            "image": imageURL,
             "name": product.name,
             "description": product.description,
             "aplications": product.aplications,
@@ -260,6 +275,7 @@ class ProductList with ChangeNotifier {
     Product novaProduct = Product(
         id: id,
         lastUpdated: lastUpdated,
+        image: image == null? '': image.path,
         name: product.name,
         category: product.category,
         description: product.description,

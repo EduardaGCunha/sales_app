@@ -7,6 +7,7 @@ import 'package:sales_app/models/product_list.dart';
 
 import '../components/product_grid.dart';
 import '../utils/app_routes.dart';
+import '../utils/cache.dart';
 
 
 class ProductScreen extends StatefulWidget {
@@ -18,23 +19,24 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-
+  
   @override
     void initState() {
-      super.initState();
-      Provider.of<ProductList>(
-        context,
-        listen: false,
-      ).loadProducts();
+    super.initState();
+    Provider.of<ProductList>(
+      context,
+      listen: false,
+    ).loadProducts();
   }
 
   @override
   Widget build(BuildContext context) {
-
+    Cache().setHasInternet;
+    
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 236, 234, 234),
+      backgroundColor: const Color.fromARGB(255, 247, 243, 243),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 236, 234, 234),
+        backgroundColor: const Color.fromARGB(255, 247, 243, 243),
         elevation: 0,
         title: SizedBox(
           width: 600,
@@ -97,9 +99,11 @@ class _ProductScreenState extends State<ProductScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(onPressed: () {}, icon: const Icon(Icons.home, color: Colors.white,)),
+                IconButton(onPressed: () {
+                  Navigator.of(context).pushReplacementNamed(AppRoutes.HOME);
+                }, icon: const Icon(Icons.home, color: Colors.white,)),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.business_center, color: Colors.white,)),
-                SizedBox(width: 20,),
+                const SizedBox(width: 20,),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.analytics_outlined, color: Colors.white,)),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.settings, color: Colors.white,)),
               ],

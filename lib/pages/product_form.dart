@@ -67,7 +67,7 @@ class _ProductFormState extends State<ProductForm> {
       await Provider.of<ProductList>(
         context,
         listen: false,
-      ).saveProduct(_formData);
+      ).saveProduct(_formData, _pickedImage);
 
       Navigator.of(context).pop();
     } catch (error) {
@@ -94,6 +94,7 @@ class _ProductFormState extends State<ProductForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
         title: const Text('Adicione um Produto'),
@@ -220,6 +221,7 @@ class _ProductFormState extends State<ProductForm> {
                         _formData['category'] = _selectedCategories;
                       },
                     ),
+                    const SizedBox(height: 20,),
                     Padding(
                       padding: const EdgeInsets.only(left: 25, right: 25, bottom: 10),
                       child: ImageInput(_selectImage),

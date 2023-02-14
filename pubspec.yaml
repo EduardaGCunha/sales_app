@@ -49,6 +49,7 @@ dependencies:
   flutter_multiselect: ^1.0.0
   multiselect_formfield: ^0.1.7
   image_picker: ^0.8.6+1
+  shared_preferences: ^2.0.17
   
 
 dev_dependencies:

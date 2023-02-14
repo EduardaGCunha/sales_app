@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sales_app/pages/product_detail.dart';
 import 'package:sales_app/pages/product_form.dart';
 import 'package:sales_app/pages/products_screen.dart';
 import 'package:sales_app/utils/app_routes.dart';
@@ -34,7 +35,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: const ProductScreen(),
         routes: {
+          AppRoutes.HOME: (ctx) => const ProductScreen(),
           AppRoutes.PRODUCT_FORM: (ctx) => const ProductForm(),
+          AppRoutes.PRODUCT_DETAIL: (ctx) => const ProductDetail(),
         },
       ),
     );

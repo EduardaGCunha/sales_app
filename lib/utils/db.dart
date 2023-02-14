@@ -1,12 +1,10 @@
 
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart' as sql;
-import 'package:sqflite/sqflite.dart';
-
 
 class DB {
-  static const dbName = 'banco3';
-  static const dbVersion = 1;
+  static const dbName = 'banco4';
+  static const dbVersion = 2;
 
   static Future<sql.Database> database() async {
     final dbPath = await sql.getDatabasesPath();
