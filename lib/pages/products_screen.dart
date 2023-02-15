@@ -100,7 +100,7 @@ class _ProductScreenState extends State<ProductScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(onPressed: () {
-                  Navigator.of(context).pushReplacementNamed(AppRoutes.HOME);
+                  // Navigator.of(context).pushReplacementNamed(AppRoutes.HOME);
                 }, icon: const Icon(Icons.home, color: Colors.white,)),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.business_center, color: Colors.white,)),
                 const SizedBox(width: 20,),

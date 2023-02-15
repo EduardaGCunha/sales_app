@@ -205,9 +205,9 @@ class _ProductFormState extends State<ProductForm> {
                       checkBoxActiveColor: Colors.green,
                       dialogShapeBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                       dataSource: const [
-                        {'value': '1', 'display': 'Algebra'},
-                        {'value': '2', 'display': 'Calculus'},
-                        {'value': '3', 'display': 'Geometry'},
+                        {'value': 'Algebra', 'display': 'Algebra'},
+                        {'value': 'Calculus', 'display': 'Calculus'},
+                        {'value': 'Geometry', 'display': 'Geometry'},
                       ],
                       textField: 'display',
                       valueField: 'value',

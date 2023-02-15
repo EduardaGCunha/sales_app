@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: const ProductScreen(),
         routes: {
-          AppRoutes.HOME: (ctx) => const ProductScreen(),
           AppRoutes.PRODUCT_FORM: (ctx) => const ProductForm(),
           AppRoutes.PRODUCT_DETAIL: (ctx) => const ProductDetail(),
         },

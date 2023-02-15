@@ -7,7 +7,6 @@ import 'package:sales_app/models/product.dart';
 
 import '../utils/app_routes.dart';
 import '../utils/cache.dart';
-import '../utils/connectivity.dart';
 
 
 //ImagePicker()
@@ -37,36 +36,29 @@ class _ProductItemState extends State<ProductItem> {
       ),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Padding(padding: EdgeInsets.only(right: 5)),
-              IconButton(
-                onPressed:() => print('need to add changing favorites'),
-                icon: const Icon(Icons.favorite_border),
-                color: Colors.black,
-              )
-            ],
-          ),
+          const SizedBox(height: 15,),
           SizedBox(
             height: 120,
             width: double.infinity,
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(AppRoutes.PRODUCT_DETAIL, arguments: {"product": product});
-              },
-              child: product.image == ''
-                  ? Container(color: const Color.fromARGB(255, 35, 150, 179),) 
-                  : Cache.hasInternet == 'yes'? 
-                  Image.network(
-                    product.image,
-                    fit: BoxFit.cover,
-                  )
-                  : Image.file(
-                    File(product.image),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(AppRoutes.PRODUCT_DETAIL, arguments: product);
+                },
+                child: product.image == ''
+                    ? Container(color: const Color.fromARGB(255, 35, 150, 179),) 
+                    : Cache.hasInternet == 'yes'? 
+                    Image.network(
+                      product.image,
                       fit: BoxFit.cover,
-                      width: double.infinity,
-                  ),
+                    )
+                    : Image.file(
+                      File(product.image),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                    ),
+              ),
             ),
           ),
           const SizedBox(height: 5,),
@@ -81,36 +73,38 @@ class _ProductItemState extends State<ProductItem> {
               ),
             ),
           ),
-          const SizedBox(height: 5,),
           Container(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              product.description,
-              style: const TextStyle(
-                color: Color.fromARGB(255, 105, 102, 102),
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
+            height: 50,
+            alignment: Alignment.topLeft,
+            child: Expanded(
+              child: Text(
+                product.description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 105, 102, 102),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 5, bottom: 10
-            ,),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () => print('adicionar pro carrinho'),
-                    icon: const Icon(
-                      Icons.shopping_cart,
-                      color: Colors.black,
-                    ),
-                  )
-                ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                onPressed:() => print('need to add changing favorites'),
+                icon: const Icon(Icons.favorite_border),
+                color: Colors.black,
               ),
-            ),
+              IconButton(
+                onPressed: () => print('adicionar pro carrinho'),
+                icon: const Icon(
+                  Icons.shopping_cart,
+                  color: Colors.black,
+                ),
+              ),
+            ],
           ),
         ],
       ),
