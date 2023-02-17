@@ -154,7 +154,7 @@ class ProductList with ChangeNotifier {
             characteristics: productData['characteristics'],
             aplications: productData['aplications'],
             image: productData['image'],
-            category: productData['category'],
+            category: productData['category'] ?? [],
             isDeleted: checkBool(productData['isDeleted']),
             needFirebase: checkBool(productData['needFirebase']),
           ),

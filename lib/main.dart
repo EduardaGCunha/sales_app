@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sales_app/pages/product_detail.dart';
 import 'package:sales_app/pages/product_form.dart';
 import 'package:sales_app/pages/products_screen.dart';
+import 'package:sales_app/pages/sales_page.dart';
 import 'package:sales_app/pages/splash.dart';
 import 'package:sales_app/utils/app_routes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
           AppRoutes.PRODUCT_PAGE: (ctx) => const ProductScreen(),
           AppRoutes.PRODUCT_FORM: (ctx) => const ProductForm(),
           AppRoutes.PRODUCT_DETAIL: (ctx) => const ProductDetail(),
+          AppRoutes.SALES_PAGE: (ctx) => const SalesPage(),
         },
       ),
     );

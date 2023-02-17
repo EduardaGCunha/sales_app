@@ -10,15 +10,15 @@ import '../utils/app_routes.dart';
 import '../utils/cache.dart';
 
 
-class ProductScreen extends StatefulWidget {
+class SalesPage extends StatefulWidget {
 
-  const ProductScreen({ Key? key}) : super(key: key);
+  const SalesPage({ Key? key}) : super(key: key);
 
   @override
-  State<ProductScreen> createState() => _ProductScreenState();
+  State<SalesPage> createState() => _SalesPageState();
 }
 
-class _ProductScreenState extends State<ProductScreen> {
+class _SalesPageState extends State<SalesPage> {
   
   @override
     void initState() {
@@ -74,7 +74,7 @@ class _ProductScreenState extends State<ProductScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                  Text(
-                  'Produtos',
+                  'Vendas',
                   style: TextStyle(
                     fontSize: 45,
                     fontWeight: FontWeight.w700,
@@ -103,7 +103,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   Navigator.of(context).pushReplacementNamed(AppRoutes.PRODUCT_PAGE);
                 }, icon: const Icon(Icons.home, color: Colors.white,)),
                 IconButton(onPressed: () {
-                  Navigator.of(context).pushReplacementNamed(AppRoutes.SALES_PAGE);
+                   Navigator.of(context).pushReplacementNamed(AppRoutes.SALES_PAGE);
                 }, icon: const Icon(Icons.business_center, color: Colors.white,)),
                 const SizedBox(width: 20,),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.analytics_outlined, color: Colors.white,)),
@@ -121,7 +121,6 @@ class _ProductScreenState extends State<ProductScreen> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: ProductGrid(),
     );
   }
 }

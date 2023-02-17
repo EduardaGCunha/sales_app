@@ -152,7 +152,7 @@ class ProductDetail extends StatelessWidget {
                     )
                   ),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(height: 10,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -163,7 +163,7 @@ class ProductDetail extends StatelessWidget {
                         product.description,
                         style: const TextStyle(
                             fontSize: 25,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w300,
                             color: Color.fromARGB(255, 94, 92, 92)
                           ),
                         ),
@@ -171,17 +171,30 @@ class ProductDetail extends StatelessWidget {
                     ),
                   ],
                 ),
-                 Row(
+                const SizedBox(height: 20,),
+                Container(
+                  padding: const EdgeInsets.only(left: 20),
+                  alignment: Alignment.centerLeft,
+                  child: const Text(
+                    'Características',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w400,
+                    )
+                  ),
+                ),
+                const SizedBox(height: 10,),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.only(left: 20, right: 20),
                         child: Text(
-                        product.description,
+                        product.characteristics,
                         style: const TextStyle(
                             fontSize: 25,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w300,
                             color: Color.fromARGB(255, 94, 92, 92)
                           ),
                         ),
@@ -189,17 +202,30 @@ class ProductDetail extends StatelessWidget {
                     ),
                   ],
                 ),
-                 Row(
+                const SizedBox(height: 20,),
+                Container(
+                  padding: const EdgeInsets.only(left: 20),
+                  alignment: Alignment.centerLeft,
+                  child: const Text(
+                    'Aplicações',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w400,
+                    )
+                  ),
+                ),
+                const SizedBox(height: 10,),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.only(left: 20, right: 20),
                         child: Text(
-                        product.description,
+                        product.characteristics,
                         style: const TextStyle(
                             fontSize: 25,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w300,
                             color: Color.fromARGB(255, 94, 92, 92)
                           ),
                         ),
