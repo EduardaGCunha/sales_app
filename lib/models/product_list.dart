@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -8,10 +7,9 @@ import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:sales_app/models/product.dart';
 
+import '../utils/bool.dart';
 import '../utils/connectivity.dart';
 import '../utils/db.dart';
-// import 'package:control/utils/util.dart';
-// import '../validation/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,6 +43,137 @@ class ProductList with ChangeNotifier {
     hasInternet = await hasInternetConnection();
   }
 
+    Future<void> synchronizedAdding(List<Product> firebase, List<Product> SQL, String table) async {
+      final productService = ProductList();
+      List<Product> fireNewInfo = [];
+      List<Product> sqlNewInfo = [];
+      if(SQL.isEmpty && firebase.isNotEmpty){
+        fireNewInfo = firebase.where((element) => !element.isDeleted).toList();
+      }else if(firebase.isEmpty && SQL.isNotEmpty){
+        sqlNewInfo = SQL; 
+      }else{
+        fireNewInfo = SQL.where((element) => element.needFirebase).toList();
+        sqlNewInfo = firebase.where((element) => !getSpecificProduct(element.id) && !element.isDeleted).toList();
+      }
+
+      for(var obra in fireNewInfo){
+        await DB.insert(table, obra.toMapSQL());
+      }
+      countProducts = 1;
+      for(var product in sqlNewInfo){
+        await addProduct(product, File(product.image));
+      }
+      countProducts = 0;
+
+      return; 
+    }
+
+  Future<void> synchronizedDeleting(List<Product> toBeDeleted, bool fireBase) async {
+
+    for (var element in toBeDeleted) {
+      fireBase ? await http.patch(Uri.parse('${Constants.PRODUCT_BASE_URL}/${element.id}.json'),body: jsonEncode({"isDeleted": element.isDeleted}),) : null;
+      await DB.deleteInfo('products', element.id);
+    }
+  }
+
+  Future<void> synchronizedUpdating(List<Product> SQL, List<Product> firebase) async {
+    List<Product> newInfoFire = [];
+    List<Product> newInfoSQL = [];
+
+    List<Product> needUpdateSQL = 
+      SQL.where(((element) => element.lastUpdated.isAfter(DateTime.now().subtract(const Duration(days: 14))))).toList();
+    List<Product> needUpdateFirebase = 
+      firebase.where(((element) => element.lastUpdated.isAfter(DateTime.now().subtract(const Duration(days: 14))))).toList();
+
+    final firebaseMap = {for (final obra in firebase) obra.id: obra};
+    final sqlMap = {for (final obra in SQL) obra.id: obra};
+
+    for(var obra in needUpdateSQL){
+      final matchingObra = firebaseMap[obra.id];
+      if(matchingObra == null){
+        return;
+      }
+      if((matchingObra.lastUpdated).isBefore(obra.lastUpdated)){
+        newInfoFire.add(obra);
+      }else if((matchingObra.lastUpdated).isAfter(obra.lastUpdated)){
+        newInfoSQL.add(matchingObra);
+      }
+    }
+
+    //updating Firebase
+    for(var obra in needUpdateFirebase){
+       final matchingObra = sqlMap[obra.id];
+      if (matchingObra == null) {
+        // Handle error: matching Obra not found in SQL
+        continue;
+      }
+      if((matchingObra.lastUpdated).isBefore(obra.lastUpdated)){
+        newInfoSQL.add(obra);
+      }else if((matchingObra.lastUpdated).isAfter(obra.lastUpdated)){
+        newInfoFire.add(matchingObra);
+      }
+      
+    }
+
+    for(var item in newInfoSQL){
+      await DB.updateInfo('products', item.id, item.toMapSQL());
+    }
+    for(var obra in newInfoFire){
+      await http.patch(Uri.parse('${Constants.PRODUCT_BASE_URL}/${obra.id}.json'),
+        body: jsonEncode(
+          { 
+            "name": obra.name,
+            "description": obra.description,
+            "aplications": obra.aplications,
+            "characteristics": obra.characteristics,
+            "lastUpdated": obra.lastUpdated.toIso8601String(),
+            "needFirebase": false,
+          }
+        ),
+      );
+    }
+  }
+
+
+   Future<void> checkData() async {
+    await loadProducts();
+    List<Product> loadedProducts = _items;
+    List<Product> toBeDeleted = [];
+    
+    //getting stuff from firebase
+    final response = await http.get(Uri.parse('${Constants.PRODUCT_BASE_URL}.json'),);
+    if (response.body == 'null') return;
+    Map<String, dynamic> data = jsonDecode(response.body);
+    data.forEach((productId, productData) {
+        firebaseItems.add(
+          Product(
+            id: productId,
+            lastUpdated: DateTime.parse(productData['lastUpdated']),
+            name: productData['name'],
+            description: productData['description'],
+            characteristics: productData['characteristics'],
+            aplications: productData['aplications'],
+            image: productData['image'],
+            category: productData['category'],
+            isDeleted: checkBool(productData['isDeleted']),
+            needFirebase: checkBool(productData['needFirebase']),
+          ),
+        );
+    });
+  
+
+    if(firebaseItems.isEmpty && loadedProducts.isEmpty){
+      return;
+    }
+    await synchronizedAdding(firebaseItems, loadedProducts, 'products');
+    toBeDeleted = loadedProducts.where((element) => element.isDeleted).toList();
+    await synchronizedDeleting(toBeDeleted, true);
+    toBeDeleted = firebaseItems.where((element) => element.isDeleted && !getSpecificProduct(element.id)).toList();
+    await synchronizedDeleting(toBeDeleted, false);
+    await synchronizedUpdating(loadedProducts, firebaseItems);
+
+  }
+
   // List<Product> get andamentoItems => _items.where((prod) => prod.isComplete).toList();
 
 
@@ -52,159 +181,13 @@ class ProductList with ChangeNotifier {
   //   return _items.length;
   // }
 
-  // bool getSpecificObra(String id){
-  //   if(_items.isEmpty){
-  //     return false;
-  //   }
-  //   return _items.where((p) => p.id == id).toList().isEmpty ? true : false;
-  // }
+  bool getSpecificProduct(String id){
+    if(_items.isEmpty){
+      return false;
+    }
+    return _items.where((p) => p.id == id).toList().isEmpty ? true : false;
+  }
 
-  // addToFirebase() async {
-  //   final List<Obra> loadedObra = await DB.getObrasFromDB('obras');
-  //     checkFirebase = 1;
-  //     countObras = 1;
-  //     for(var item in loadedObra){
-  //       if(item.isDeleted == false && item.needFirebase == true){
-  //         item.needFirebase = false;
-  //         await DB.updateInfo('obras', item.id, item.toMapSQL());
-  //         await addProduct(item);
-  //       }
-  //     }
-  //   countObras = 0;
-  // }
-
-  // Future<void> checkData() async {
-  //   hasInternet = true;
-  //   final List<Obra> loadedObras = await DB.getObrasFromDB('obras');
-    
-  //   final response = await http.get(Uri.parse('${Constants.PRODUCT_BASE_URL}.json'),);
-  //   if (response.body == 'null') return;
-  //   Map<String, dynamic> data = jsonDecode(response.body);
-  //   data.forEach((productId, productData) {
-  //       firebaseItems.add(
-  //         Obra(
-  //           id: productId,
-  //           lastUpdated: DateTime.parse(productData['lastUpdated']),
-  //           name: productData['name'],
-  //           engineer: productData['engineer'],
-  //           address: productData['address'],
-  //           owner: productData['owner'],
-  //           isDeleted: checkBool(productData['isDeleted']),
-  //           needFirebase: checkBool(productData['needFirebase']),
-  //         ),
-  //       );
-  //   });
-  
-
-  //   //if there's nothing on each;
-  //   if(firebaseItems.isEmpty && loadedObras.isEmpty){
-  //     return;
-  //   }
-
-  //   //adding if there's nothing on firebase;
-  //   if(firebaseItems.isEmpty && loadedObras.isNotEmpty){
-  //     countObras = 1;
-  //     for(var obra in loadedObras){
-  //       await addProduct(obra);
-  //     }
-  //     countObras = 0;
-  //   }
-
-  //   //adding if there's nothing on SQL;
-  //   if(loadedObras.isEmpty && firebaseItems.isNotEmpty){
-  //     List<Obra> newInsert = firebaseItems.where((element) => !element.isDeleted).toList();
-  //     for(var obra in newInsert){
-  //       await DB.insert('obras', obra.toMapSQL());
-  //     }
-  //   }else if(firebaseItems.isEmpty && loadedObras.isNotEmpty){
-  //     countObras = 1;
-  //     for(var obra in loadedObras){
-  //       await addProduct(obra);
-  //     }
-  //     countObras = 0;
-  //   }
-
-  //   //ADDING IF NEEDED
-  //   //to firebase
-  //   List<Obra> addingStuff = loadedObras.where((element) => element.needFirebase).toList();
-  //   for (var element in addingStuff) {
-  //     countObras = 1;
-  //     await addProduct(element);
-  //     countObras = 0;
-  //   }
-
-  //   //to SQL
-  //   addingStuff = firebaseItems.where((element) => !getSpecificObra(element.id) && !element.isDeleted).toList();
-  //   for (var element in addingStuff) {
-  //     await DB.insert('obras', element.toMapSQL());
-  //   }
-
-  //   //DELETING IF NEEDED
-  //   //from firebase
-  //   List<Obra> deletingStuff = loadedObras.where((element) => element.isDeleted).toList();
-  //   for (var element in deletingStuff) {
-  //     await http.patch(Uri.parse('${Constants.PRODUCT_BASE_URL}/${element.id}.json'),body: jsonEncode({"isDeleted": element.isDeleted}),);
-  //     await DB.deleteInfo('obras', element.id);
-  //   }
-    
-  //   //from sql
-  //   deletingStuff = firebaseItems.where((element) => element.isDeleted && !getSpecificObra(element.id)).toList();
-  //   for (var element in deletingStuff) {
-  //      await DB.deleteInfo('obras', element.id);
-  //   }
-
-  //   //UPDATING IF NEEDED
-  //   //updating SQL
-  //   List<Obra> needUpdateSQL = loadedObras.where(((element) => element.lastUpdated.isBefore(DateTime.now().subtract(const Duration(days: 14))))).toList();
-  //   for(var obra in needUpdateSQL){
-  //     Obra matchingObra = firebaseItems.where((element) => element.id == obra.id,).toList().first;
-  //     if((matchingObra.lastUpdated).isBefore(obra.lastUpdated)){
-  //       await http.patch(Uri.parse('${Constants.PRODUCT_BASE_URL}/${obra.id}.json'),
-  //           body: jsonEncode(
-  //             { 
-  //               "name": obra.name,
-  //               "engineer": obra.engineer,
-  //               "owner": obra.owner,
-  //               "address": obra.address,
-  //               "lastUpdated": DateTime.now().toIso8601String(),
-  //               "isComplete": obra.isComplete,
-  //               "needFirebase": false,
-  //             }
-  //           ),
-  //       );
-  //     }else if((matchingObra.lastUpdated).isAfter(obra.lastUpdated)){
-  //       await DB.updateInfo('obras', obra.id, matchingObra.toMapSQL());
-  //     }
-  //   }
-
-  //   //updating Firebase
-  //   List<Obra> needUpdateFirebase = firebaseItems.where(((element) => element.lastUpdated.isBefore(DateTime.now().subtract(const Duration(minutes: 10))))).toList();
-  //   for(var obra in needUpdateFirebase){
-  //     List<Obra> input = loadedObras.where((element) => element.id == obra.id,).toList();
-  //     if(input.isEmpty){
-  //       return;
-  //     }else{
-  //       Obra matchingObra = input.first;
-  //       if((matchingObra.lastUpdated).isBefore(obra.lastUpdated)){
-  //         await DB.updateInfo('obras', matchingObra.id, obra.toMapSQL());
-  //       }else if((matchingObra.lastUpdated).isAfter(obra.lastUpdated)){
-  //         await http.patch(Uri.parse('${Constants.PRODUCT_BASE_URL}/${obra.id}.json'),
-  //           body: jsonEncode(
-  //             { 
-  //               "name": obra.name,
-  //               "engineer": obra.engineer,
-  //               "owner": obra.owner,
-  //               "address": obra.address,
-  //               "lastUpdated": DateTime.now().toIso8601String(),
-  //               "isComplete": obra.isComplete,
-  //               "needFirebase": false,
-  //             }
-  //           ),
-  //         );
-  //       }
-  //     }
-  //   }
-  // }
 
   Future<String> uploadImageFirebase(Product product, File image) async{
     final storage = FirebaseStorage.instance;

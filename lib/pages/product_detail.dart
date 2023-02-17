@@ -94,13 +94,18 @@ class ProductDetail extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: Text(
-                      product.name.toUpperCase(),
-                      style: const TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.w700
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Text(
+                          product.name.toUpperCase(),
+                          style: const TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.w700
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -166,7 +171,42 @@ class ProductDetail extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Text(
+                        product.description,
+                        style: const TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w700,
+                            color: Color.fromARGB(255, 94, 92, 92)
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Text(
+                        product.description,
+                        style: const TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w700,
+                            color: Color.fromARGB(255, 94, 92, 92)
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
