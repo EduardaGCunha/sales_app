@@ -15,18 +15,19 @@ class ProductGrid extends StatelessWidget {
     final provider = Provider.of<ProductList>(context);
     final List<Product> loadedProducts = provider.items; //do filter here
 
-    return GridView.builder(
-      padding: const EdgeInsets.all(10),
-      itemCount: loadedProducts.length,
-      itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
-        value: loadedProducts[i],
-        child: ProductItem(),
-      ),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.68,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
+    return SizedBox(
+      height: 270,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          padding: const EdgeInsets.all(10),
+          itemCount: loadedProducts.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
+            value: loadedProducts[i],
+            child: ProductItem(),
+          ),
+        ),
       ),
     );
   }

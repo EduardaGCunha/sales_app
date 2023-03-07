@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        home: const SplashScreen(),
+        home: const ProductScreen(),
         routes: {
           AppRoutes.PRODUCT_PAGE: (ctx) => const ProductScreen(),
           AppRoutes.PRODUCT_FORM: (ctx) => const ProductForm(),

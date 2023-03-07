@@ -94,24 +94,50 @@ class _ProductFormState extends State<ProductForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: const Color.fromARGB(157, 25, 42, 68),
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        title: const Text('Adicione um Produto'),
+        backgroundColor: Color.fromARGB(209, 25, 42, 68),
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 236, 182, 55)),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: const Color.fromARGB(255, 236, 182, 55),
         onPressed: _submitForm,
         icon: const Icon(Icons.save), 
         label: const Text('Salvar')
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Padding(
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromARGB(193, 12, 54, 117),
+                    Color.fromARGB(255, 25, 42, 68),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage('https://www.grainsystems.com/content/dam/public/grain-and-protein/grain-systems/product-images/storage/evo-50/4024-EVO24-1440.jpg'),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                    Color.fromARGB(255, 7, 41, 70).withOpacity(0.8),
+                    BlendMode.srcATop,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.all(15),
               child: Form(
                 key: _formKey,
@@ -121,88 +147,135 @@ class _ProductFormState extends State<ProductForm> {
                       'Adicione',
                       style: TextStyle(
                         fontSize: 30,
-                        fontWeight: FontWeight.w400,
-                        color: Color.fromARGB(255, 46, 44, 44)
+                        fontWeight: FontWeight.w600,
+                        color: Color.fromARGB(255, 255, 255, 255)
                       ),
                     ),
                     const Text(
                       'seu Produto!',
                       style: TextStyle(
                         fontSize: 30,
-                        fontWeight: FontWeight.w400,
-                        color: Color.fromARGB(255, 46, 44, 44)
+                        fontWeight: FontWeight.w600,
+                        color: Color.fromARGB(255, 255, 255, 255)
                       ),
                     ),
                     const SizedBox(height: 20,),
-                    TextFormField(
-                      initialValue: _formData['name']?.toString(),
-                      decoration: const InputDecoration(
-                        labelText: 'Nome',
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      textInputAction: TextInputAction.next,
-                      onSaved: (name) => _formData['name'] = name ?? '',
-                      validator: (_name) {
-                        final name = _name ?? '';
-
-                        if (name.trim().isEmpty) {
-                          return 'Nome é obrigatório';
-                        }
-
-                        if (name.trim().length < 3) {
-                          return 'Nome precisa no mínimo de 3 letras.';
-                        }
-                        return null;
-                      },
+                      child: TextFormField(
+                        initialValue: _formData['name']?.toString(),
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          labelText: 'Nome',
+                          prefixIcon: const Icon(Icons.house),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        onSaved: (name) => _formData['name'] = name ?? '',
+                        validator: (_name) {
+                          final name = _name ?? '';
+                          
+                          if (name.trim().isEmpty) {
+                            return 'Nome é obrigatório';
+                          }
+                          
+                          if (name.trim().length < 3) {
+                            return 'Nome precisa no mínimo de 3 letras.';
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                     const SizedBox(height: 20,),
-                    TextFormField(
-                      initialValue: _formData['description']?.toString(),
-                      decoration: const InputDecoration(
-                        labelText: 'Descrição',
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      textInputAction: TextInputAction.next,
-                      onSaved: (description) => _formData['description'] = description ?? '',
-                      validator: (_description) {
-                        final description = _description ?? '';
-
-                        if (description.trim().isEmpty) {
-                          return 'Descrição é obrigatória';
-                        }
-
-                        if (description.trim().length < 3) {
-                          return 'O nome do engenheiro precisa de no mínimo de 3 letras.';
-                        }
-
-                        return null;
-                      },
+                      child: TextFormField(
+                        initialValue: _formData['description']?.toString(),
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          labelText: 'Descrição',
+                          prefixIcon: const Icon(Icons.book),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        onSaved: (description) => _formData['description'] = description ?? '',
+                        validator: (_description) {
+                          final description = _description ?? '';
+                          
+                          if (description.trim().isEmpty) {
+                            return 'Descrição é obrigatória';
+                          }
+                          
+                          if (description.trim().length < 3) {
+                            return 'O nome do engenheiro precisa de no mínimo de 3 letras.';
+                          }
+                          
+                          return null;
+                        },
+                      ),
                     ),
                     const SizedBox(height: 20,),
-                    TextFormField(
-                      initialValue: _formData['characteristics']?.toString(),
-                      decoration: const InputDecoration(
-                        labelText: 'Características',
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      textInputAction: TextInputAction.next,
-                      onSaved: (characteristics) => _formData['characteristics'] = characteristics ?? '',
+                      child: TextFormField(
+                        initialValue: _formData['characteristics']?.toString(),
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          labelText: 'Características',
+                          prefixIcon: const Icon(Icons.category),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        onSaved: (characteristics) => _formData['characteristics'] = characteristics ?? '',
+                      ),
                     ),
-                    TextFormField(
-                      initialValue: _formData['aplications']?.toString(),
-                      decoration: const InputDecoration(labelText: 'Aplicações'),
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 3,
-                      onSaved: (aplications) =>
-                          _formData['aplications'] = aplications ?? '',
+                    const SizedBox(height: 20,),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: TextFormField(
+                        initialValue: _formData['aplications']?.toString(),
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          labelText: 'Aplicações',
+                          prefixIcon: const Icon(Icons.apps),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 3,
+                        onSaved: (aplications) =>
+                            _formData['aplications'] = aplications ?? '',
+                      ),
                     ),
                     const SizedBox(height: 20,),
                     MultiSelectFormField(
                       title: const Text(
                         'Categorias',
                         style: TextStyle(
-                          color: Color.fromARGB(255, 46, 44, 44)
+                          color: Color.fromARGB(255, 66, 66, 66),
                         ),
                       ),
-                      checkBoxActiveColor: Colors.green,
+                      checkBoxActiveColor: Colors.yellow,
                       dialogShapeBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                       dataSource: const [
                         {'value': 'Algebra', 'display': 'Algebra'},
@@ -213,7 +286,7 @@ class _ProductFormState extends State<ProductForm> {
                       valueField: 'value',
                       okButtonLabel: 'OK',
                       cancelButtonLabel: 'CANCEL',
-                      hintWidget: const Text('Escolha as categorias'),
+                      hintWidget: const Text('Escolha as categorias', style: TextStyle(color: Color.fromARGB(255, 102, 102, 102)),),
                       initialValue: _selectedCategories,
                       onSaved: (value) {
                         if (value == null) return;
@@ -229,7 +302,9 @@ class _ProductFormState extends State<ProductForm> {
                   ],
                 ),
               ),
-            ),
+            )
+          ],
+        ),
     );
   }
 

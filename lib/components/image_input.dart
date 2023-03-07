@@ -71,14 +71,14 @@ class _ImageInputState extends State<ImageInput> {
             const SizedBox(width: 10),
             Expanded(
               child: TextButton.icon(
-                icon: const Icon(Icons.camera),
+                icon: const Icon(Icons.camera, color: Color.fromARGB(255, 236, 182, 55),),
                 label: const Text('Tirar Foto'),
                 onPressed: () => _takePicture(true),
               ),
             ),
             Expanded(
               child: TextButton.icon(
-                icon: const Icon(Icons.camera),
+                icon: const Icon(Icons.photo_library, color: Color.fromARGB(255, 236, 182, 55),),
                 label: const Text('Carregar da Galeria'),
                 onPressed: () => _takePicture(false),
               ),

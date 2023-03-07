@@ -7,22 +7,26 @@ import '../utils/bool.dart';
 import '../utils/constants.dart';
 import 'package:http/http.dart' as http;
 
-class Sales with ChangeNotifier{
+class Obra with ChangeNotifier{
   final String id;
-  final String name;
-  final String description;
-  final String preco;
+  final String enterprise;
+  final String address;
+  final String owner;
+  final List<String> image;
+  final List<String> products;
   final DateTime data;
   DateTime lastUpdated;
   bool hasInternet = false;
   bool isDeleted;
   bool needFirebase;
 
-  Sales({
+  Obra({
     required this.id,
-    required this.name,
-    required this.preco,
-    required this.description,
+    required this.enterprise,
+    required this.image,
+    required this.products,
+    required this.owner,
+    required this.address,
     required this.data,
     required this.lastUpdated,
     this.isDeleted = false,
@@ -32,22 +36,25 @@ class Sales with ChangeNotifier{
   Map<String, dynamic> toMapSQL() {
     return {
       'id': id,
-      'name': name,
-      'preco': preco,
+      'enterprise': enterprise,
       'data': data,
+      'image': image.join(','),
+      'products': products.join(','),
       'lastUpdated': lastUpdated.toIso8601String(),
       'isDeleted': boolToSql(isDeleted),
-      'description': description,
+      'address': address,
       'needFirebase': boolToSql(needFirebase),
     };
   }
 
-  factory Sales.fromSQLMap(Map<String, dynamic> map) {
-    return Sales(
+  factory Obra.fromSQLMap(Map<String, dynamic> map) {
+    return Obra(
       id: map['id'] as String,
-      name: map['name'] as String,
-      preco: map['preco'] as String,
-      description: map['description'] != null? map['description'] as String: '',
+      enterprise: map['enterprise'] as String,
+      image: map['image'] as List<String>,
+      products: map['products'] as List<String>,
+      owner: map['owner'] as String,
+      address: map['address'] != null? map['address'] as String: '',
       lastUpdated: DateTime.parse(map['lastUpdated']),
       data: DateTime.parse(map['lastUpdated']),
       isDeleted: map['isDeleted'] != null? checkBool(map['isDeleted']) : false,
