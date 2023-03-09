@@ -28,6 +28,7 @@ class _ProjectItemState extends State<ProjectItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: const Color.fromARGB(255, 32, 52, 82),
       margin: const EdgeInsets.all(10),
       child: InkWell(
         onTap: () {
@@ -50,54 +51,92 @@ class _ProjectItemState extends State<ProjectItem> {
                   color: const Color.fromARGB(255, 211, 179, 90),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.picture_as_pdf, size: 50, color: Colors.white),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.picture_as_pdf, size: 50, color: Colors.white),
+                    Text(
+                      'Projeto',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(width: 10),
               Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    'Projeto',
-                    style: Theme.of(context).textTheme.titleLarge,
+                  const Text(
+                    'Características',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    )
                   ),
                   const SizedBox(height: 5),
                   Row(
                     children: [
-                      const Icon(Icons.engineering, color: Color.fromARGB(255, 72, 87, 121),),
+                      const SizedBox(width: 3),
+                      const Icon(Icons.engineering, color: Color.fromARGB(255, 211, 179, 90),),
                       const SizedBox(width: 5),
                       Expanded(
-                        child: Text(widget.project.engineer),
+                        child: Text(widget.project.engineer, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500,),),
                       ),
                     ],
                   ),
+                  widget.project.civil 
+                  ? Row(
+                    children: const [
+                      Icon(Icons.house, color: Color.fromARGB(255, 211, 179, 90),),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          'Obra Civil',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ) : SizedBox(),
+                  widget.project.eletrical ? 
                   Row(
-                    children: [
-                      const Icon(Icons.house, color: Color.fromARGB(255, 72, 87, 121),),
-                      const SizedBox(width: 5),
+                    children: const [
+                      Icon(Icons.bolt, color: Color.fromARGB(255, 211, 179, 90),),
+                      SizedBox(width: 5),
                       Expanded(
-                        child: Text('Obra Civil: ${widget.project.civil ? 'Sim' : 'Não'}'),
+                        child: Text(
+                          'Obra Elétrica',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
                     ],
-                  ),
+                  ) : SizedBox(),
+                  widget.project.financial? 
                   Row(
-                    children: [
-                      const Icon(Icons.bolt, color: Color.fromARGB(255, 72, 87, 121),),
-                      const SizedBox(width: 5),
+                    children: const [
+                      Icon(Icons.monetization_on, color: Color.fromARGB(255, 211, 179, 90),),
+                      SizedBox(width: 5),
                       Expanded(
-                        child: Text('Obra Elétrica: ${widget.project.eletrical ? 'Sim' : 'Não'}'),
+                        child: Text(
+                          'Financiado',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
                     ],
-                  ),
-                  Row(
-                    children: [
-                      const Icon(Icons.monetization_on, color: Color.fromARGB(255, 72, 87, 121),),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Text('Financiamento: ${widget.project.financial ? 'Sim' : 'Não'}'),
-                      ),
-                    ],
-                  ),
+                  ) : SizedBox(),
                 ],
               ),
             ),

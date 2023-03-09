@@ -47,6 +47,7 @@ class DataPage extends StatelessWidget {
           ) 
           : Column(
           children: [
+            SizedBox(height: 19,),
             ProjectItem(project: projects.first, pdf: pdf,)
           ],
         )

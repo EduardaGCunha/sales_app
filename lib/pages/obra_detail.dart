@@ -8,13 +8,11 @@ import 'package:provider/provider.dart';
 import 'package:sales_app/models/diary.dart';
 import 'package:sales_app/models/diary_list.dart';
 import 'package:sales_app/models/obra.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 
+import '../components/diary_grid.dart';
 import '../models/project.dart';
 import '../models/project_list.dart';
-import '../utils/app_routes.dart';
 import 'data_page.dart';
-import 'diary_page.dart';
 
 
 enum FilterOptions {
@@ -56,7 +54,6 @@ class _ObraDetailState extends State<ObraDetail> with TickerProviderStateMixin{
       }
     }
 
-
     return Scaffold(
     backgroundColor: const Color.fromARGB(255, 72, 87, 121),
     body: CustomScrollView(
@@ -82,7 +79,7 @@ class _ObraDetailState extends State<ObraDetail> with TickerProviderStateMixin{
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.transparent,
+                        Color.fromARGB(75, 108, 114, 211),
                         Color.fromARGB(255, 25, 42, 68),
                       ],
                     ),
@@ -99,30 +96,33 @@ class _ObraDetailState extends State<ObraDetail> with TickerProviderStateMixin{
                         fontSize: 24,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width - 100,
-                      animation: true,
-                      lineHeight: 20,
-                      animationDuration: 1000,
-                      percent: percentage,
-                      center: Text(
-                        '${(percentage * 100).toInt()}%',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 15,
+                    const SizedBox(height: 10,),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: LinearPercentIndicator(
+                        width: MediaQuery.of(context).size.width-20,
+                        animation: true,
+                        lineHeight: 20,
+                        animationDuration: 1000,
+                        percent: percentage,
+                        center: Text(
+                          '${(percentage * 100).toInt()}%',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
+                        linearGradient: const LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 243, 212, 33),
+                            Color.fromARGB(255, 250, 224, 109),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        backgroundColor: Colors.white.withOpacity(0.4),
                       ),
-                      linearGradient: const LinearGradient(
-                        colors: [
-                          Colors.blue,
-                          Colors.lightBlueAccent,
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                      backgroundColor: Colors.white.withOpacity(0.4),
                     ),
                     const SizedBox(height: 20),
                   ],
@@ -161,7 +161,7 @@ class _ObraDetailState extends State<ObraDetail> with TickerProviderStateMixin{
                   child: TabBarView(
                     children: [
                       DataPage(projects: loadedProjects, matchmakingId: obra.id),
-                      DiaryPage(diaries: loadedDiaries, matchmakingId: obra.id,)
+                      DiaryGrid(matchmakingId: obra.id,)
                     ],
                   ),
                 ),

@@ -45,6 +45,11 @@ class DiaryList with ChangeNotifier {
     return _items.where((p) => p.id == id).toList().isEmpty ? true : false;
   }
 
+  List<Diary> allMatchingDiaries(matchId){
+    return _items.where((prod) => prod.matchmakingId == matchId).toList();
+  }
+
+
 
   onLoad() async {
     hasInternet = await hasInternetConnection();
