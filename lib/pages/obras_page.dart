@@ -4,31 +4,42 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/components/app_drawer.dart';
+import 'package:sales_app/models/obra_list.dart';
 import 'package:sales_app/models/product_list.dart';
 
-import '../components/product_grid.dart';
+import '../components/obra_grid.dart';
+import '../models/diary_list.dart';
+import '../models/project_list.dart';
 import '../utils/app_routes.dart';
 import '../utils/cache.dart';
 
 
-class SalesPage extends StatefulWidget {
+class ObrasPage extends StatefulWidget {
 
-  const SalesPage({ Key? key}) : super(key: key);
+  const ObrasPage({ Key? key}) : super(key: key);
 
   @override
-  State<SalesPage> createState() => _SalesPageState();
+  State<ObrasPage> createState() => _ObrasPageState();
 }
 
-class _SalesPageState extends State<SalesPage> {
+class _ObrasPageState extends State<ObrasPage> {
   int _currentIndex = 0;
   
   @override
     void initState() {
     super.initState();
-    Provider.of<ProductList>(
+    Provider.of<ObraList>(
       context,
       listen: false,
     ).loadProducts();
+    Provider.of<ProjectList>(
+      context,
+      listen: false,
+    ).loadProjects();
+    Provider.of<DiaryList>(
+      context,
+      listen: false,
+    ).loadDiaries();
   }
 
   @override
@@ -90,7 +101,7 @@ class _SalesPageState extends State<SalesPage> {
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
-        color: Color.fromARGB(255, 25, 42, 68),
+        color: const Color.fromARGB(255, 25, 42, 68),
         child: IconTheme(
           data: const IconThemeData(color:  Color.fromARGB(255, 60, 105, 172)), 
           child: Padding(
@@ -101,9 +112,7 @@ class _SalesPageState extends State<SalesPage> {
                 IconButton(onPressed: () {
                   Navigator.of(context).pushReplacementNamed(AppRoutes.PRODUCT_PAGE);
                 }, icon: const Icon(Icons.home, color: Colors.white,)),
-                IconButton(onPressed: () {
-                  Navigator.of(context).pushReplacementNamed(AppRoutes.SALES_PAGE);
-                }, icon: const Icon(Icons.construction, color: Colors.white,)),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.construction, color: Colors.white,)),
                 const SizedBox(width: 20,),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.analytics_outlined, color: Colors.white,)),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.settings, color: Colors.white,)),
@@ -116,7 +125,7 @@ class _SalesPageState extends State<SalesPage> {
         backgroundColor:Color.fromARGB(255, 39, 62, 97),
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).pushNamed(AppRoutes.PRODUCT_FORM);
+          Navigator.of(context).pushNamed(AppRoutes.OBRA_FORM);
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -127,7 +136,7 @@ class _SalesPageState extends State<SalesPage> {
             padding: const EdgeInsets.only(left: 20, top: 15),
             alignment: Alignment.centerLeft,
             child: const Text(
-              'Descubra',
+              'Obras',
               style: TextStyle(
                 fontSize: 40,
                 color: Colors.white,
@@ -188,7 +197,7 @@ class _SalesPageState extends State<SalesPage> {
             padding: const EdgeInsets.only(left: 15, top: 15),
             alignment: Alignment.centerLeft,
             child: const Text(
-              'Transportadores',
+              'Obras Em Andamento',
               style: TextStyle(
                 fontSize: 25,
                 color: Colors.white,
@@ -197,12 +206,12 @@ class _SalesPageState extends State<SalesPage> {
               ),
             ),
           ),
-          const ProductGrid(),
+          const ObraGrid(),
           Container(
             padding: const EdgeInsets.only(left: 15, top: 15),
             alignment: Alignment.centerLeft,
             child: const Text(
-              'Silos',
+              'Obras Concluídas',
               style: TextStyle(
                 fontSize: 25,
                 color: Colors.white,
@@ -211,7 +220,7 @@ class _SalesPageState extends State<SalesPage> {
               ),
             ),
           ),
-          const ProductGrid(),
+          const ObraGrid(),
         ],
           ),
       ),

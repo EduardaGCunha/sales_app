@@ -41,6 +41,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   path_provider: ^2.0.11
+  percent_indicator: ^3.0.1
   path: ^1.8.2
   connectivity_plus: ^2.3.7
   internet_connection_checker: ^0.0.1+4
@@ -50,7 +51,10 @@ dependencies:
   multiselect_formfield: ^0.1.7
   image_picker: ^0.8.6+1
   shared_preferences: ^2.0.17
+  file_picker: ^5.2.5
+  rolling_switch: ^0.0.2
   carousel_slider: ^4.0.0
+  flutter_pdfview: ^1.0.1
   
 
 dev_dependencies:
@@ -70,7 +74,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -92,6 +96,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+
+  assets:
+    - lib/images/
+
   fonts:
     - family: Roboto
       fonts:

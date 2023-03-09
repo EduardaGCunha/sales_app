@@ -230,7 +230,6 @@ class ProductList with ChangeNotifier {
     bool needFirebase;
     String imageURL = '';
     if(hasInternet == true){
-      needFirebase = false;
       if(image != null){
         imageURL = await uploadImageFirebase(product, image);
       }
@@ -244,7 +243,6 @@ class ProductList with ChangeNotifier {
             "aplications": product.aplications,
             "characteristics": product.characteristics,
             "lastUpdated": product.lastUpdated.toIso8601String(),
-            "needFirebase": needFirebase,
           },
         ),
       );
@@ -264,7 +262,6 @@ class ProductList with ChangeNotifier {
         description: product.description,
         aplications: product.aplications,
         characteristics: product.characteristics,
-        needFirebase: needFirebase,
         isDeleted: product.isDeleted,
     );
 
@@ -278,8 +275,6 @@ class ProductList with ChangeNotifier {
   }
 
 
-
- 
   Future<void> updateProduct(Product product) async {
     int index = _items.indexWhere((p) => p.id == product.id);
     

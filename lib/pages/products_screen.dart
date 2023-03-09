@@ -90,7 +90,7 @@ class _ProductScreenState extends State<ProductScreen> {
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
-        color: Color.fromARGB(255, 25, 42, 68),
+        color: const Color.fromARGB(255, 25, 42, 68),
         child: IconTheme(
           data: const IconThemeData(color:  Color.fromARGB(255, 60, 105, 172)), 
           child: Padding(
@@ -98,11 +98,9 @@ class _ProductScreenState extends State<ProductScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                IconButton(onPressed: () {}, icon: const Icon(Icons.home, color: Colors.white,)),
                 IconButton(onPressed: () {
-                  Navigator.of(context).pushReplacementNamed(AppRoutes.PRODUCT_PAGE);
-                }, icon: const Icon(Icons.home, color: Colors.white,)),
-                IconButton(onPressed: () {
-                  Navigator.of(context).pushReplacementNamed(AppRoutes.SALES_PAGE);
+                  Navigator.of(context).pushReplacementNamed(AppRoutes.OBRAS_PAGE);
                 }, icon: const Icon(Icons.construction, color: Colors.white,)),
                 const SizedBox(width: 20,),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.analytics_outlined, color: Colors.white,)),
