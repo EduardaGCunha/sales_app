@@ -29,7 +29,7 @@ class DiaryGrid extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor:const Color.fromARGB(255, 211, 179, 90),
+        backgroundColor:const Color.fromARGB(255, 255, 196, 37),
         label: const Text('Adicionar Diário'),
         icon: const Icon(Icons.add),
         onPressed: () {

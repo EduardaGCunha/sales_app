@@ -27,7 +27,7 @@ class DataPage extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 72, 87, 121),
+      backgroundColor: const Color.fromARGB(255, 41, 67, 105),
       body: SingleChildScrollView(
         child: projects.isEmpty? Container(
             alignment: Alignment.center,

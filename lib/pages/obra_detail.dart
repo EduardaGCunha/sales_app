@@ -115,7 +115,7 @@ class _ObraDetailState extends State<ObraDetail> with TickerProviderStateMixin{
                         ),
                         linearGradient: const LinearGradient(
                           colors: [
-                            Color.fromARGB(255, 243, 212, 33),
+                            Color.fromARGB(255, 255, 196, 37),
                             Color.fromARGB(255, 250, 224, 109),
                           ],
                           begin: Alignment.centerLeft,
@@ -137,16 +137,8 @@ class _ObraDetailState extends State<ObraDetail> with TickerProviderStateMixin{
             child: Column(
               children: [
                 Container(
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 39, 62, 97),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(255, 10, 30, 61).withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 32, 52, 82),
                   ),
                   child: const TabBar(
                     tabs: [
@@ -154,7 +146,7 @@ class _ObraDetailState extends State<ObraDetail> with TickerProviderStateMixin{
                       Tab(text: 'Diários'),
                     ],
                     labelColor: Colors.white,
-                    indicatorColor: Color.fromARGB(255, 255, 233, 35),
+                    indicatorColor: Color.fromARGB(255, 255, 196, 37),
                   ),
                 ),
                 Expanded(

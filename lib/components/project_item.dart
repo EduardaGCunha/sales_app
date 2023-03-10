@@ -28,7 +28,7 @@ class _ProjectItemState extends State<ProjectItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color.fromARGB(255, 32, 52, 82),
+      color: const Color.fromARGB(255, 72, 87, 121), 
       margin: const EdgeInsets.all(10),
       child: InkWell(
         onTap: () {
@@ -48,7 +48,7 @@ class _ProjectItemState extends State<ProjectItem> {
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 211, 179, 90),
+                  color: const Color.fromARGB(255, 255, 196, 37),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -82,7 +82,7 @@ class _ProjectItemState extends State<ProjectItem> {
                   Row(
                     children: [
                       const SizedBox(width: 3),
-                      const Icon(Icons.engineering, color: Color.fromARGB(255, 211, 179, 90),),
+                      const Icon(Icons.engineering, color: Color.fromARGB(255, 255, 196, 37),),
                       const SizedBox(width: 5),
                       Expanded(
                         child: Text(widget.project.engineer, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500,),),
@@ -92,7 +92,7 @@ class _ProjectItemState extends State<ProjectItem> {
                   widget.project.civil 
                   ? Row(
                     children: const [
-                      Icon(Icons.house, color: Color.fromARGB(255, 211, 179, 90),),
+                      Icon(Icons.house, color: Color.fromARGB(255, 255, 196, 37),),
                       SizedBox(width: 5),
                       Expanded(
                         child: Text(
@@ -108,7 +108,7 @@ class _ProjectItemState extends State<ProjectItem> {
                   widget.project.eletrical ? 
                   Row(
                     children: const [
-                      Icon(Icons.bolt, color: Color.fromARGB(255, 211, 179, 90),),
+                      Icon(Icons.bolt, color: Color.fromARGB(255, 255, 196, 37),),
                       SizedBox(width: 5),
                       Expanded(
                         child: Text(
@@ -124,7 +124,7 @@ class _ProjectItemState extends State<ProjectItem> {
                   widget.project.financial? 
                   Row(
                     children: const [
-                      Icon(Icons.monetization_on, color: Color.fromARGB(255, 211, 179, 90),),
+                      Icon(Icons.monetization_on, color: Color.fromARGB(255, 255, 196, 37),),
                       SizedBox(width: 5),
                       Expanded(
                         child: Text(
